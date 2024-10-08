@@ -35,17 +35,17 @@ def select_one_row(dbConn, sql, parameters = None):
     dbCursor = dbConn.cursor()
 
     try:
-       # try execute
-       dbCursor.execute(sql, parameters)
-       row = dbCursor.fetchone()
-       return row;
-   except Exception as err:
-       # failed
-       print("select_one_row failed:", err)
-       return None
-   finally:
-       # always close cursor at end
-       dbCursor.close()
+        # try execute
+        dbCursor.execute(sql, parameters)
+        row = dbCursor.fetchone()
+        return row;
+    except Exception as err:
+        # failed
+        print("select_one_row failed:", err)
+        return None
+    finally:
+        # always close cursor at end
+        dbCursor.close()
 
 
 ##################################################################
@@ -73,17 +73,17 @@ def select_n_rows(dbConn, sql, parameters = None):
     dbCursor = dbConn.cursor()
 
     try:
-       # try execute
-       dbCursor.execute(sql, parameters)
-       row = dbCursor.fetchall()
-       return row;
-   except Exception as err:
-       # failed
-       print("select_n_rows failed:", err)
-       return None
-   finally:
-       # always close cursor at end
-       dbCursor.close()
+        # try execute
+        dbCursor.execute(sql, parameters)
+        row = dbCursor.fetchall()
+        return row;
+    except Exception as err:
+        # failed
+        print("select_n_rows failed:", err)
+        return None
+    finally:
+        # always close cursor at end
+        dbCursor.close()
 
 
 ##################################################################
@@ -114,14 +114,14 @@ def perform_action(dbConn, sql, parameters = None):
     dbCursor = dbConn.cursor()
 
     try:
-       # try execute
-       dbCursor.execute(sql, parameters)
-       row = dbCursor.rowcount
-       return row;
-   except Exception as err:
-       # failed
-       print("perform_action failed:", err)
-       return 0
-   finally:
-       # always close cursor at end
-       dbCursor.close()
+        # try execute
+        dbCursor.execute(sql, parameters)
+        row = dbCursor.rowcount
+        return row;
+    except Exception as err:
+        # failed
+        print("perform_action failed:", err)
+        return 0
+    finally:
+        # always close cursor at end
+        dbCursor.close()
