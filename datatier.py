@@ -38,7 +38,7 @@ def select_one_row(dbConn, sql, parameters = None):
         # try execute
         dbCursor.execute(sql, parameters)
         row = dbCursor.fetchone()
-        return row if row else None;
+        return row if row else ();
     except Exception as err:
         # failed
         print("select_one_row failed:", err)
@@ -76,7 +76,7 @@ def select_n_rows(dbConn, sql, parameters = None):
         # try execute
         dbCursor.execute(sql, parameters)
         row = dbCursor.fetchall()
-        return row if row else None;
+        return row if row else [];
     except Exception as err:
         # failed
         print("select_n_rows failed:", err)
@@ -121,7 +121,7 @@ def perform_action(dbConn, sql, parameters = None):
     except Exception as err:
         # failed
         print("perform_action failed:", err)
-        return 0
+        return -1
     finally:
         # always close cursor at end
         dbCursor.close()
