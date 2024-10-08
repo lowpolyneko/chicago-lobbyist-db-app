@@ -31,7 +31,7 @@ def select_one_row(dbConn, sql, parameters = None):
     with dbConn.cursor() as cur:
        try:
            # try executing
-           cur.execute(sql, parameters)
+           cur.execute(sql, parameters if parameters else ())
            return cur.fetchone()
        except Exception as err:
            print("select_one_row failed:", err)
@@ -61,7 +61,7 @@ def select_n_rows(dbConn, sql, parameters = None):
     with dbConn.cursor() as cur:
        try:
            # try executing
-           cur.execute(sql, parameters)
+           cur.execute(sql, parameters if parameters else ())
            return cur.fetchall()
        except Exception as err:
            print("select_n_rows failed:", err)
@@ -94,7 +94,7 @@ def perform_action(dbConn, sql, parameters = None):
     with dbConn.cursor() as cur:
         try:
             # try executing
-            cur.execute(sql, parameters)
+            cur.execute(sql, parameters if parameters else ())
             return cur.rowcount
         except Exception as err:
            print("select_n_rows failed:", err)
