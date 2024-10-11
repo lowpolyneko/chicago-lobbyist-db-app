@@ -218,7 +218,17 @@ class LobbyistClients:
 #           If an error occurs, the function returns -1
 #
 def num_lobbyists(dbConn):
-   pass
+    # run query
+    res = datatier.select_one_row(dbConn, """
+        SELECT COUNT(Lobbyist_ID) FROM LobbyistInfo
+    """)
+
+    # check for fail
+    if not res:
+        return -1
+
+    # first column is the count
+    return res[0]
 
 ##################################################################
 # 
@@ -228,7 +238,17 @@ def num_lobbyists(dbConn):
 #           If an error occurs, the function returns -1
 #
 def num_employers(dbConn):
-   pass
+    # run query
+    res = datatier.select_one_row(dbConn, """
+        SELECT COUNT(Employer_ID) FROM EmployerInfo
+    """)
+
+    # check for fail
+    if not res:
+        return -1
+
+    # first column is the count
+    return res[0]
 
 ##################################################################
 # 
@@ -238,7 +258,17 @@ def num_employers(dbConn):
 #           If an error occurs, the function returns -1
 #
 def num_clients(dbConn):
-   pass
+    # run query
+    res = datatier.select_one_row(dbConn, """
+        SELECT COUNT(Client_ID) FROM ClientInfo
+    """)
+
+    # check for fail
+    if not res:
+        return -1
+
+    # first column is the count
+    return res[0]
 
 ##################################################################
 #
@@ -254,8 +284,23 @@ def num_clients(dbConn):
 #          which case an error msg is already output).
 #
 def get_lobbyists(dbConn, pattern):
-   pass
+    # run query
+    res = datatier.select_n_rows(dbConn, f"""
+    SELECT Lobbyist_ID, First_Name, Last_Name, Phone FROM LobbyistInfo
+    WHERE First_Name = '{pattern}' OR Last_Name = '{pattern}'
+    ORDER BY Lobbyist_ID ASC
+    """)
 
+    # check for fail
+    if not res:
+        return []
+
+    # return list
+    lobbyists = []
+    for row in res:
+        lobbyists.append(Lobbyist(*row))
+
+    return lobbyists
 
 ##################################################################
 #
@@ -271,8 +316,18 @@ def get_lobbyists(dbConn, pattern):
 #          case an error msg is already output).
 #
 def get_lobbyist_details(dbConn, lobbyist_id):
-   pass
-         
+    # run query
+    res = datatier.select_one_row(dbConn, f"""
+    SELECT * FROM LobbyistInfo
+    WHERE Lobbyist_ID = ?
+    """, [lobbyist_id])
+
+    # check for fail
+    if not res:
+        return None
+
+    # return object
+    return LobbyistDetails(*res)
 
 ##################################################################
 #
@@ -287,7 +342,27 @@ def get_lobbyist_details(dbConn, lobbyist_id):
 #          occurs (in which case an error msg is already output).
 #
 def get_top_N_lobbyists(dbConn, N, year):
-   pass
+    # run query
+    res = datatier.select_one_row(dbConn, f"""
+    SELECT LobbyistInfo.* FROM Compensation
+    JOIN LobbyistYears ON Compensation.Lobbyist_ID = LobbyistYears.Lobbyist_ID
+    JOIN LobbyistInfo ON Compensation.Lobbyist_ID = LobbyistInfo.Lobbyist_ID
+    WHERE Year = ?
+    GROUP BY SUM(Compensation_Amount)
+    ORDER BY SUM(Compensation_Amount) DESC
+    LIMIT ?
+    """, [year, N])
+
+    # check for fail
+    if not res:
+        return None
+
+    # return object
+    lobbyists = []
+    for row in res:
+        lobbyists.append(LobbyistDetails(*row))
+
+    return lobbyists
 
 
 ##################################################################
@@ -303,7 +378,11 @@ def get_top_N_lobbyists(dbConn, N, year):
 #          an internal error occurred).
 #
 def add_lobbyist_year(dbConn, lobbyist_id, year):
-   pass
+    # run transaction and return result
+    return 1 if datatier.perform_action(dbConn, f"""
+        INSERT INTO LobbyistYears
+        VALUES (?, ?)
+    """, [lobbyist_id, year]) > 0 else 0
 
 
 ##################################################################
@@ -322,4 +401,9 @@ def add_lobbyist_year(dbConn, lobbyist_id, year):
 #          an internal error occurred).
 #
 def set_salutation(dbConn, lobbyist_id, salutation):
-   pass
+    # run transaction and return result
+    return 1 if datatier.perform_action(dbConn, f"""
+        UPDATE LobbyistDetails
+        WHERE Lobbyist_ID = ?
+        SET Salutation = ?
+    """, [lobbyist_id, salutation]) > 0 else 0
