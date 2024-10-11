@@ -382,14 +382,26 @@ def get_top_N_lobbyists(dbConn, N, year):
     res = datatier.select_n_rows(dbConn, """
     SELECT Compensation.Lobbyist_ID, First_Name, Last_Name, Phone, SUM(Compensation_Amount) FROM Compensation
     JOIN LobbyistInfo ON Compensation.Lobbyist_ID = LobbyistInfo.Lobbyist_ID
-    JOIN LobbyistYears ON Compensation.Lobbyist_ID = LobbyistYears.Lobbyist_ID
-    WHERE Year = ?
+    WHERE strftime('%Y', Period_Start) <= ? AND strftime('%Y', Period_End) >= ?
     GROUP BY Compensation.Lobbyist_ID
     ORDER BY SUM(Compensation_Amount) DESC
     LIMIT ?
-    """, [year, N])
+    """, [year, year, N])
 
-    return [LobbyistClients(*row, []) for row in res]
+    lobbyists = []
+    for row in res:
+        res2 = datatier.select_n_rows(dbConn, """
+        SELECT Client_Name FROM Compensation
+        JOIN ClientInfo ON Compensation.Client_ID = ClientInfo.Client_ID
+        WHERE Lobbyist_ID = ? AND strftime('%Y', Period_Start) <= ? AND strftime('%Y', Period_End) >= ?
+        GROUP BY Compensation.Client_ID
+        ORDER BY Client_Name
+        """)
+
+        clients = [x[0] for x in res2] if res2 else []
+        lobbyists.append(LobbyistDetails(*row, clients))
+
+    return lobbyists
 
 ##################################################################
 #
