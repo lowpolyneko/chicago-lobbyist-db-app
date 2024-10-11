@@ -399,7 +399,7 @@ def get_top_N_lobbyists(dbConn, N, year):
         WHERE Lobbyist_ID = ? AND strftime('%Y', Period_Start) <= ? AND strftime('%Y', Period_End) >= ?
         GROUP BY Compensation.Client_ID
         ORDER BY Client_Name
-        """)
+        """, [row[0], year, year])
 
         clients = [x[0] for x in res2] if res2 else []
         lobbyists.append(LobbyistClients(*row, clients))
