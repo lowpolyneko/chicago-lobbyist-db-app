@@ -383,7 +383,6 @@ def get_top_N_lobbyists(dbConn, N, year):
     JOIN LobbyistYears ON Compensation.Lobbyist_ID = LobbyistYears.Lobbyist_ID
     JOIN LobbyistInfo ON Compensation.Lobbyist_ID = LobbyistInfo.Lobbyist_ID
     WHERE Year = ?
-    GROUP BY SUM(Compensation_Amount)
     ORDER BY SUM(Compensation_Amount) DESC
     LIMIT ?
     """, [year, N])
