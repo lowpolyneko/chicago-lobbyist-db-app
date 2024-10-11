@@ -340,7 +340,7 @@ def get_lobbyist_details(dbConn, lobbyist_id):
 
     # get employers
     res3 = datatier.select_n_rows(dbConn, f"""
-    SELECT Employer_Name FROM EmployerInfo
+    SELECT DISTINCT Employer_Name FROM EmployerInfo
     JOIN LobbyistAndEmployer ON EmployerInfo.Employer_ID = LobbyistAndEmployer.Employer_ID
     WHERE Lobbyist_ID = ?
     """, [lobbyist_id])
@@ -362,7 +362,6 @@ def get_lobbyist_details(dbConn, lobbyist_id):
         return None
 
     # return object
-    print((*res, years, employers, res4[0]))
     return LobbyistDetails(*res, years, employers, res4[0])
 
 ##################################################################
