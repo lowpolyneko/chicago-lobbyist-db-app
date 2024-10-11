@@ -403,11 +403,11 @@ def get_top_N_lobbyists(dbConn, N, year):
 
         # get clients
         res3 = datatier.select_n_rows(dbConn, f"""
-        SELECT DISTINCT Client_Name FROM ClientInfo
-        JOIN Compensation ON ClientInfo.Client_ID = Compensation.Client_ID
-        WHERE Lobbyist_ID = ?
+        SELECT DISTINCT Client_Name FROM Compensation
+        JOIN ClientInfo ON Compensation.Client_ID = ClientInfo.Client_ID
+        WHERE Compensation.Lobbyist_ID = ? AND Year = ?
         ORDER BY Client_Name
-        """, [row[0]])
+        """, [row[0], year])
 
         clients = [x[0] for x in res3]
 
