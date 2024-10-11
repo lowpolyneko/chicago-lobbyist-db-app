@@ -389,6 +389,9 @@ def get_top_N_lobbyists(dbConn, N, year):
     """, [year, year, N])
 
     lobbyists = []
+    if not res:
+        return lobbyists
+
     for row in res:
         res2 = datatier.select_n_rows(dbConn, """
         SELECT Client_Name FROM Compensation
@@ -399,7 +402,7 @@ def get_top_N_lobbyists(dbConn, N, year):
         """)
 
         clients = [x[0] for x in res2] if res2 else []
-        lobbyists.append(LobbyistDetails(*row, clients))
+        lobbyists.append(LobbyistClients(*row, clients))
 
     return lobbyists
 
