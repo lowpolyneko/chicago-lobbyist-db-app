@@ -411,7 +411,7 @@ def get_top_N_lobbyists(dbConn, N, year):
 
         clients = [x[0] for x in res3]
 
-        lobbyists.append(LobbyistClients(*res2, res[1], clients))
+        lobbyists.append(LobbyistClients(*res2, row[1], clients))
 
     return lobbyists
 
