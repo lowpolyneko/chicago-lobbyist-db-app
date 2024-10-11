@@ -326,8 +326,43 @@ def get_lobbyist_details(dbConn, lobbyist_id):
     if not res:
         return None
 
+    # get years
+    res2 = datatier.select_n_rows(dbConn, f"""
+    SELECT Year FROM Years
+    WHERE Lobbyist_ID = ?
+    """, [lobbyist_id])
+
+    # check for fail
+    if res2 == None:
+        return None
+
+    years = [x[0] for x in res2]
+
+    # get employers
+    res3 = datatier.select_n_rows(dbConn, f"""
+    SELECT Employer_Name FROM EmployerInfo
+    JOIN LobbyistAndEmployer ON EmployerInfo.Employer_ID = LobbyistAndEmployer.Employer_ID
+    WHERE Lobbyist_ID = ?
+    """, [lobbyist_id])
+
+    # check for fail
+    if res3 == None:
+        return None
+
+    employers = [x[0] for x in res3]
+
+    # get total comp
+    res4 = datatier.select_one_row(dbConn, f"""
+    SELECT SUM(Compensation_Amount) FROM Compensation
+    WHERE Lobbyist_ID = ?
+    """, [lobbyist_id])
+
+    # check for fail
+    if res4 == None:
+        return None
+
     # return object
-    return LobbyistDetails(*res, [], [], 0)
+    return LobbyistDetails(*res, years, employers, res4[0])
 
 ##################################################################
 #
@@ -360,7 +395,42 @@ def get_top_N_lobbyists(dbConn, N, year):
     # return object
     lobbyists = []
     for row in res:
-        lobbyists.append(LobbyistDetails(*row, [], [], 0))
+        # get years
+        res2 = datatier.select_n_rows(dbConn, f"""
+        SELECT Year FROM Years
+        WHERE Lobbyist_ID = ?
+        """, [lobbyist_id])
+
+        # check for fail
+        if res2 == None:
+            return None
+
+        years = [x[0] for x in res2]
+
+        # get employers
+        res3 = datatier.select_n_rows(dbConn, f"""
+        SELECT Employer_Name FROM EmployerInfo
+        JOIN LobbyistAndEmployer ON EmployerInfo.Employer_ID = LobbyistAndEmployer.Employer_ID
+        WHERE Lobbyist_ID = ?
+        """, [lobbyist_id])
+
+        # check for fail
+        if res3 == None:
+            return None
+
+        employers = [x[0] for x in res3]
+
+        # get total comp
+        res4 = datatier.select_one_row(dbConn, f"""
+        SELECT SUM(Compensation_Amount) FROM Compensation
+        WHERE Lobbyist_ID = ?
+        """, [lobbyist_id])
+
+        # check for fail
+        if res4 == None:
+            return None
+
+        lobbyists.append(LobbyistDetails(*row, years, employers, res4[0]))
 
     return lobbyists
 
