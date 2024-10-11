@@ -457,7 +457,7 @@ def set_salutation(dbConn, lobbyist_id, salutation):
 
     # run transaction and return result
     return 1 if datatier.perform_action(dbConn, f"""
-        UPDATE LobbyistDetails
+        UPDATE LobbyistInfo
         SET Salutation = ?
         WHERE Lobbyist_ID = ?
     """, [lobbyist_id, salutation]) > 0 else 0
