@@ -343,6 +343,7 @@ def get_lobbyist_details(dbConn, lobbyist_id):
     SELECT DISTINCT Employer_Name FROM EmployerInfo
     JOIN LobbyistAndEmployer ON EmployerInfo.Employer_ID = LobbyistAndEmployer.Employer_ID
     WHERE Lobbyist_ID = ?
+    ORDER BY Employer_Name
     """, [lobbyist_id])
 
     # check for fail
@@ -357,8 +358,12 @@ def get_lobbyist_details(dbConn, lobbyist_id):
     WHERE Lobbyist_ID = ?
     """, [lobbyist_id])
 
+    # check for fail
+    if res4 == None:
+        return None
+
     # return object
-    return LobbyistDetails(*res, years, employers, res4[0] if res4 else 0)
+    return LobbyistDetails(*res, years, employers, res4[0] if res4[0] else 0)
 
 ##################################################################
 #
@@ -396,6 +401,7 @@ def get_top_N_lobbyists(dbConn, N, year):
         SELECT DISTINCT Client_Name FROM ClientInfo
         JOIN Compensation ON ClientInfo.Client_ID = Compensation.Client_ID
         WHERE Lobbyist_ID = ?
+        ORDER BY Client_Name
         """, [row[0]])
 
         clients = [x[0] for x in res2]
