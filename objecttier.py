@@ -357,12 +357,8 @@ def get_lobbyist_details(dbConn, lobbyist_id):
     WHERE Lobbyist_ID = ?
     """, [lobbyist_id])
 
-    # check for fail
-    if res4 == None:
-        return None
-
     # return object
-    return LobbyistDetails(*res, years, employers, res4[0])
+    return LobbyistDetails(*res, years, employers, res4[0] if res4 else 0)
 
 ##################################################################
 #
