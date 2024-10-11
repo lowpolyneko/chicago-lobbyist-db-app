@@ -424,6 +424,10 @@ def get_top_N_lobbyists(dbConn, N, year):
 #          an internal error occurred).
 #
 def add_lobbyist_year(dbConn, lobbyist_id, year):
+    # check if lobbyist exists
+    if not get_lobbyist_details(dbConn, lobbyist_id):
+        return 0
+
     # run transaction and return result
     return 1 if datatier.perform_action(dbConn, f"""
         INSERT INTO LobbyistYears
@@ -447,6 +451,10 @@ def add_lobbyist_year(dbConn, lobbyist_id, year):
 #          an internal error occurred).
 #
 def set_salutation(dbConn, lobbyist_id, salutation):
+    # check if lobbyist exists
+    if not get_lobbyist_details(dbConn, lobbyist_id):
+        return 0
+
     # run transaction and return result
     return 1 if datatier.perform_action(dbConn, f"""
         UPDATE LobbyistDetails
