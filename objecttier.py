@@ -362,7 +362,7 @@ def get_lobbyist_details(dbConn, lobbyist_id):
         return None
 
     # return object
-    return LobbyistDetails(*res, years, employers, *res4)
+    return LobbyistDetails(*res, years, employers, res4[0])
 
 ##################################################################
 #
@@ -379,7 +379,7 @@ def get_lobbyist_details(dbConn, lobbyist_id):
 def get_top_N_lobbyists(dbConn, N, year):
     # run query
     res = datatier.select_n_rows(dbConn, f"""
-    SELECT LobbyistInfo.* FROM Compensation
+    SELECT Compensation.Lobbyist_ID, First_Name, Last_Name, Phone, SUM(Compensation_Amount) FROM Compensation
     JOIN LobbyistYears ON Compensation.Lobbyist_ID = LobbyistYears.Lobbyist_ID
     JOIN LobbyistInfo ON Compensation.Lobbyist_ID = LobbyistInfo.Lobbyist_ID
     WHERE Year = ?
@@ -395,44 +395,16 @@ def get_top_N_lobbyists(dbConn, N, year):
     # return object
     lobbyists = []
     for row in res:
-        lobbyist_id = row[0] # first element is id
-
-        # get years
+        # get clients
         res2 = datatier.select_n_rows(dbConn, f"""
-        SELECT Year FROM LobbyistYears
+        SELECT Client_Name FROM ClientInfo
+        JOIN Compensation ON ClientInfo.Client_ID = Compensation.Client_ID
         WHERE Lobbyist_ID = ?
-        """, [lobbyist_id])
+        """, [row[0]])
 
-        # check for fail
-        if res2 == None:
-            return None
+        clients = [x[0] for x in res2]
 
-        years = [x[0] for x in res2]
-
-        # get employers
-        res3 = datatier.select_n_rows(dbConn, f"""
-        SELECT Employer_Name FROM EmployerInfo
-        JOIN LobbyistAndEmployer ON EmployerInfo.Employer_ID = LobbyistAndEmployer.Employer_ID
-        WHERE Lobbyist_ID = ?
-        """, [lobbyist_id])
-
-        # check for fail
-        if res3 == None:
-            return None
-
-        employers = [x[0] for x in res3]
-
-        # get total comp
-        res4 = datatier.select_one_row(dbConn, f"""
-        SELECT SUM(Compensation_Amount) FROM Compensation
-        WHERE Lobbyist_ID = ?
-        """, [lobbyist_id])
-
-        # check for fail
-        if res4 == None:
-            return None
-
-        lobbyists.append(LobbyistDetails(*row, years, employers, *res4))
+        lobbyists.append(LobbyistClients(*row, clients))
 
     return lobbyists
 
