@@ -382,7 +382,7 @@ def get_top_N_lobbyists(dbConn, N, year):
     res = datatier.select_n_rows(dbConn, f"""
     SELECT Compensation.Lobbyist_ID, First_Name, Last_Name, Phone, SUM(Compensation_Amount) FROM Compensation
     JOIN LobbyistYears ON Compensation.Lobbyist_ID = LobbyistYears.Lobbyist_ID
-    JOIN ClientYears ON Compensation.Client_ID = LobbyistYears.Client_ID
+    JOIN ClientYears ON Compensation.Client_ID = ClientYears.Client_ID
     JOIN LobbyistInfo ON Compensation.Lobbyist_ID = LobbyistInfo.Lobbyist_ID
     WHERE LobbyistYears.Year = ? AND ClientYears.Year = ?
     GROUP BY Compensation.Lobbyist_ID
