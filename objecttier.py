@@ -327,7 +327,7 @@ def get_lobbyist_details(dbConn, lobbyist_id):
         return None
 
     # return object
-    return LobbyistDetails(*res)
+    return LobbyistDetails(*res, [], [], 0)
 
 ##################################################################
 #
@@ -360,7 +360,7 @@ def get_top_N_lobbyists(dbConn, N, year):
     # return object
     lobbyists = []
     for row in res:
-        lobbyists.append(LobbyistDetails(*row))
+        lobbyists.append(LobbyistDetails(*row, [], [], 0))
 
     return lobbyists
 
