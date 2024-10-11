@@ -399,9 +399,10 @@ def get_top_N_lobbyists(dbConn, N, year):
         # get clients
         res2 = datatier.select_n_rows(dbConn, f"""
         SELECT Client_Name FROM Compensation
-        JOIN ClientInfo ON Compensation.Client_ID = ClientInfo.Client_ID
         JOIN ClientYears ON Compensation.Client_ID = ClientYears.Client_ID
+        JOIN ClientInfo ON Compensation.Client_ID = ClientInfo.Client_ID
         WHERE Lobbyist_ID = ? AND Year = ?
+        GROUP BY Compensation.Client_ID
         ORDER BY Client_Name
         """, [row[0], year])
 
