@@ -465,4 +465,4 @@ def set_salutation(dbConn, lobbyist_id, salutation):
         UPDATE LobbyistInfo
         SET Salutation = ?
         WHERE Lobbyist_ID = ?
-    """, [lobbyist_id, salutation]) > 0 else 0
+    """, [salutation, lobbyist_id]) > 0 else 0
