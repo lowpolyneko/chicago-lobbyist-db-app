@@ -362,6 +362,7 @@ def get_lobbyist_details(dbConn, lobbyist_id):
         return None
 
     # return object
+    print((*res, years, employers, res4[0]))
     return LobbyistDetails(*res, years, employers, res4[0])
 
 ##################################################################
@@ -400,7 +401,6 @@ def get_top_N_lobbyists(dbConn, N, year):
         SELECT DISTINCT Client_Name FROM ClientInfo
         JOIN Compensation ON ClientInfo.Client_ID = Compensation.Client_ID
         WHERE Lobbyist_ID = ?
-        ORDER BY Client_Name
         """, [row[0]])
 
         clients = [x[0] for x in res2]
