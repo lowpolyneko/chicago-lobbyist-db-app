@@ -378,7 +378,7 @@ def get_lobbyist_details(dbConn, lobbyist_id):
 #
 def get_top_N_lobbyists(dbConn, N, year):
     # run query
-    res = datatier.select_one_row(dbConn, f"""
+    res = datatier.select_n_rows(dbConn, f"""
     SELECT LobbyistInfo.* FROM Compensation
     JOIN LobbyistYears ON Compensation.Lobbyist_ID = LobbyistYears.Lobbyist_ID
     JOIN LobbyistInfo ON Compensation.Lobbyist_ID = LobbyistInfo.Lobbyist_ID
