@@ -328,7 +328,7 @@ def get_lobbyist_details(dbConn, lobbyist_id):
 
     # get years
     res2 = datatier.select_n_rows(dbConn, f"""
-    SELECT Year FROM Years
+    SELECT Year FROM LobbyistYears
     WHERE Lobbyist_ID = ?
     """, [lobbyist_id])
 
@@ -396,7 +396,7 @@ def get_top_N_lobbyists(dbConn, N, year):
     for row in res:
         # get years
         res2 = datatier.select_n_rows(dbConn, f"""
-        SELECT Year FROM Years
+        SELECT Year FROM LobbyistYears
         WHERE Lobbyist_ID = ?
         """, [lobbyist_id])
 
