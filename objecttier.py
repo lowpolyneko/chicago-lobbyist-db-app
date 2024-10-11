@@ -379,42 +379,17 @@ def get_lobbyist_details(dbConn, lobbyist_id):
 #
 def get_top_N_lobbyists(dbConn, N, year):
     # run query
-    # res = datatier.select_n_rows(dbConn, f"""
-    # SELECT Compensation.Lobbyist_ID, First_Name, Last_Name, Phone, SUM(Compensation_Amount) FROM Compensation
-    # JOIN LobbyistYears ON Compensation.Lobbyist_ID = LobbyistYears.Lobbyist_ID
-    # JOIN ClientYears ON Compensation.Client_ID = ClientYears.Client_ID
-    # JOIN LobbyistInfo ON Compensation.Lobbyist_ID = LobbyistInfo.Lobbyist_ID
-    # WHERE LobbyistYears.Year = ? AND ClientYears.Year = ?
-    # GROUP BY Compensation.Lobbyist_ID
-    # ORDER BY SUM(Compensation_Amount) DESC
-    # LIMIT ?
-    # """, [year, year, N])
-    #
-    # # check for fail
-    # if not res:
-    #     return None
+    res = datatier.select_n_rows(dbConn, """
+    SELECT Compensation.Lobbyist_ID, First_Name, Last_Name, Phone, SUM(Compensation_Amount) FROM Compensation
+    JOIN LobbyistInfo ON Compensation.Lobbyist_ID = LobbyistInfo.Lobbyist_ID
+    JOIN LobbyistYears ON Compensation.Lobbyist_ID = LobbyistYears.Lobbyist_ID
+    WHERE Year = ?
+    GROUP BY Compensation.Lobbyist_ID
+    ORDER BY SUM(Compensation_Amount) DESC
+    LIMIT ?
+    """, [year, N])
 
-    # return object
-    # lobbyists = []
-    # for row in res:
-        # get clients
-        # res2 = datatier.select_n_rows(dbConn, f"""
-        # SELECT Client_Name FROM Compensation
-        # JOIN ClientYears ON Compensation.Client_ID = ClientYears.Client_ID
-        # JOIN ClientInfo ON Compensation.Client_ID = ClientInfo.Client_ID
-        # WHERE Lobbyist_ID = ? AND Year = ?
-        # GROUP BY Compensation.Client_ID
-        # ORDER BY Client_Name
-        # """, [row[0], year])
-        #
-        # clients = [x[0] for x in res2]
-    #     clients = []
-    #
-    #     lobbyists.append(LobbyistClients(*row, clients))
-    #
-    # return lobbyists
-    pass
-
+    return [LobbyistClients(*row, []) for row in res]
 
 ##################################################################
 #
