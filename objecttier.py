@@ -287,7 +287,7 @@ def get_lobbyists(dbConn, pattern):
     # run query
     res = datatier.select_n_rows(dbConn, f"""
     SELECT Lobbyist_ID, First_Name, Last_Name, Phone FROM LobbyistInfo
-    WHERE LOWER(First_Name) = '{pattern.lower()}' OR LOWER(Last_Name) = '{pattern.lower()}'
+    WHERE First_Name = '{pattern.upper()}' OR Last_Name = '{pattern.upper()}'
     ORDER BY Lobbyist_ID ASC
     """)
 
