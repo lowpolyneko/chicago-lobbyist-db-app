@@ -380,8 +380,9 @@ def get_lobbyist_details(dbConn, lobbyist_id):
 def get_top_N_lobbyists(dbConn, N, year):
     # run query
     res = datatier.select_n_rows(dbConn, f"""
-    SELECT Compensation.Lobbyist_ID, SUM(Compensation_Amount) FROM Compensation
+    SELECT Lobbyist_ID, First_Name, Last_Name, Phone, Compensation.Lobbyist_ID, SUM(Compensation_Amount) FROM Compensation
     JOIN LobbyistYears ON Compensation.Lobbyist_ID = LobbyistYears.Lobbyist_ID
+    JOIN LobbyistInfo ON Compensation.Lobbyist_ID = LobbyistInfo.Lobbyist_ID
     WHERE Year = ?
     GROUP BY Compensation.Lobbyist_ID
     ORDER BY SUM(Compensation_Amount) DESC
@@ -395,23 +396,18 @@ def get_top_N_lobbyists(dbConn, N, year):
     # return object
     lobbyists = []
     for row in res:
-        # get lobbyist info
-        res2 = datatier.select_one_row(dbConn, """
-        SELECT Lobbyist_ID, First_Name, Last_Name, Phone FROM LobbyistInfo
-        WHERE Lobbyist_ID = ?
-        """, [row[0]])
-
         # get clients
-        res3 = datatier.select_n_rows(dbConn, f"""
+        res2 = datatier.select_n_rows(dbConn, f"""
         SELECT DISTINCT Client_Name FROM Compensation
         JOIN ClientInfo ON Compensation.Client_ID = ClientInfo.Client_ID
+        JOIN ClientYear ON Compensation.Client_ID = ClientYear.Client_ID
         WHERE Compensation.Lobbyist_ID = ? AND Year = ?
         ORDER BY Client_Name
         """, [row[0], year])
 
-        clients = [x[0] for x in res3]
+        clients = [x[0] for x in res2]
 
-        lobbyists.append(LobbyistClients(*res2, row[1], clients))
+        lobbyists.append(LobbyistClients(*row, clients))
 
     return lobbyists
 
