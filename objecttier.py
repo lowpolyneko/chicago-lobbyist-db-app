@@ -395,6 +395,8 @@ def get_top_N_lobbyists(dbConn, N, year):
     # return object
     lobbyists = []
     for row in res:
+        lobbyist_id = row[0] # first element is id
+
         # get years
         res2 = datatier.select_n_rows(dbConn, f"""
         SELECT Year FROM LobbyistYears
