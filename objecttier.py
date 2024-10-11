@@ -379,24 +379,24 @@ def get_lobbyist_details(dbConn, lobbyist_id):
 #
 def get_top_N_lobbyists(dbConn, N, year):
     # run query
-    res = datatier.select_n_rows(dbConn, f"""
-    SELECT Compensation.Lobbyist_ID, First_Name, Last_Name, Phone, SUM(Compensation_Amount) FROM Compensation
-    JOIN LobbyistYears ON Compensation.Lobbyist_ID = LobbyistYears.Lobbyist_ID
-    JOIN ClientYears ON Compensation.Client_ID = ClientYears.Client_ID
-    JOIN LobbyistInfo ON Compensation.Lobbyist_ID = LobbyistInfo.Lobbyist_ID
-    WHERE LobbyistYears.Year = ? AND ClientYears.Year = ?
-    GROUP BY Compensation.Lobbyist_ID
-    ORDER BY SUM(Compensation_Amount) DESC
-    LIMIT ?
-    """, [year, year, N])
-
-    # check for fail
-    if not res:
-        return None
+    # res = datatier.select_n_rows(dbConn, f"""
+    # SELECT Compensation.Lobbyist_ID, First_Name, Last_Name, Phone, SUM(Compensation_Amount) FROM Compensation
+    # JOIN LobbyistYears ON Compensation.Lobbyist_ID = LobbyistYears.Lobbyist_ID
+    # JOIN ClientYears ON Compensation.Client_ID = ClientYears.Client_ID
+    # JOIN LobbyistInfo ON Compensation.Lobbyist_ID = LobbyistInfo.Lobbyist_ID
+    # WHERE LobbyistYears.Year = ? AND ClientYears.Year = ?
+    # GROUP BY Compensation.Lobbyist_ID
+    # ORDER BY SUM(Compensation_Amount) DESC
+    # LIMIT ?
+    # """, [year, year, N])
+    #
+    # # check for fail
+    # if not res:
+    #     return None
 
     # return object
-    lobbyists = []
-    for row in res:
+    # lobbyists = []
+    # for row in res:
         # get clients
         # res2 = datatier.select_n_rows(dbConn, f"""
         # SELECT Client_Name FROM Compensation
@@ -408,11 +408,12 @@ def get_top_N_lobbyists(dbConn, N, year):
         # """, [row[0], year])
         #
         # clients = [x[0] for x in res2]
-        clients = []
-
-        lobbyists.append(LobbyistClients(*row, clients))
-
-    return lobbyists
+    #     clients = []
+    #
+    #     lobbyists.append(LobbyistClients(*row, clients))
+    #
+    # return lobbyists
+    pass
 
 
 ##################################################################
