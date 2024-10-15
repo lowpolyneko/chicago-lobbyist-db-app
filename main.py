@@ -58,7 +58,7 @@ def command_2(db: sqlite3.Connection):
 
     print(f'\n{details.Lobbyist_ID} :')
     print(f'  Full Name: {details.Salutation} {details.First_Name} {details.Middle_Initial} {details.Last_Name} {details.Suffix}')
-    print(f'  Address: {details.Address_1} {details.Address_2} , {details.City} , {details.State_Initial} , {details.Zip_Code} {details.Country}')
+    print(f'  Address: {details.Address_1} {details.Address_2} , {details.City} , {details.State_Initial} {details.Zip_Code} {details.Country}')
     print(f'  Email: {details.Email}')
     print(f'  Phone: {details.Phone}')
     print(f'  Fax: {details.Fax}')
@@ -189,7 +189,7 @@ def main():
         elif i == 'x':
             break
 
-    print('**Error, unknown command, try again...')
+        print('**Error, unknown command, try again...')
 
 
 if __name__ == '__main__':
