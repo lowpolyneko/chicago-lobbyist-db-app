@@ -162,31 +162,29 @@ def print_stats(db: sqlite3.Connection):
 # main
 #
 def main():
-    # open db connection
-
-    db = sqlite3.connect('Chicago_Lobbyists.db')
+    dbConn = sqlite3.connect("Chicago_Lobbyists.db")
 
     print('** Welcome to the Chicago Lobbyist Database Application **')
-    print_stats(db)
+    print_stats(dbConn)
 
     # main eval loop
     while True:
         i = input('\nPlease enter a command (1-5, x to exit): ')
 
         if i == '1':
-            command_1(db)
+            command_1(dbConn)
             continue
         elif i == '2':
-            command_2(db)
+            command_2(dbConn)
             continue
         elif i == '3':
-            command_3(db)
+            command_3(dbConn)
             continue
         elif i == '4':
-            command_4(db)
+            command_4(dbConn)
             continue
         elif i == '5':
-            command_5(db)
+            command_5(dbConn)
             continue
         elif i == 'x':
             break
