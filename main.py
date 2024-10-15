@@ -163,6 +163,7 @@ def print_stats(db: sqlite3.Connection):
 #
 def main():
     # open db connection
+
     db = sqlite3.connect('Chicago_Lobbyists.db')
 
     print('** Welcome to the Chicago Lobbyist Database Application **')
