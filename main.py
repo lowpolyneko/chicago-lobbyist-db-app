@@ -68,7 +68,7 @@ def command_2(db: sqlite3.Connection):
     print('\n  Employers: ', end='')
     for e in details.Employers:
         print(e, end=', ')
-    print(f'\n  Total Compensation: ${details.Total_Compensation:.02f}')
+    print(f'\n  Total Compensation: ${details.Total_Compensation:,.02f}')
 
 
 ##################################################################  
@@ -95,7 +95,7 @@ def command_3(db: sqlite3.Connection):
     for i, l in enumerate(top_n_lobbyists):
         print(f'{i} . {l.First_Name} {l.Last_Name}')
         print(f'  Phone: {l.Phone}')
-        print(f'  Total Compensation: ${l.Total_Compensation:.02f}')
+        print(f'  Total Compensation: ${l.Total_Compensation:,.02f}')
         print('  Clients: ', end='')
         for c in l.Clients:
             print(c, end=', ')
