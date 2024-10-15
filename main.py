@@ -26,12 +26,12 @@ def command_1(db: sqlite3.Connection):
     search = input('\nEnter lobbyist name (first or last, wildcards _ and % supported): ')
     lobbyists = objecttier.get_lobbyists(db, search)
 
+    print(f'\nNumber of lobbyists found: {len(lobbyists)}\n')
+
     # check for too many items
     if len(lobbyists) > 100:
         print('\nThere are too many lobbyists to display, please narrow your search and try again...')
         return
-
-    print(f'\nNumber of lobbyists found: {len(lobbyists)}\n')
 
     for l in lobbyists:
         print(f'{l.Lobbyist_ID} : {l.First_Name} {l.Last_Name} Phone: {l.Phone}')
