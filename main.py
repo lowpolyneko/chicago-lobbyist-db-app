@@ -82,8 +82,8 @@ def command_3(db: sqlite3.Connection):
 
     @param db database
     """
-    N = input('\nEnter the value of N: ')
-    if int(N) < 1:
+    N = int(input('\nEnter the value of N: '))
+    if N < 1:
         print('Please enter a positive value for N...')
         return
 
