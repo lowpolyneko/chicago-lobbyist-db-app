@@ -115,7 +115,7 @@ def command_4(db: sqlite3.Connection):
     search = input('Enter the lobbyist ID: ')
 
     # 1 for success, 0 for failure
-    if objecttier.add_lobbyist_year(db, search, year):
+    if objecttier.add_lobbyist_year(db, search, year) > 0:
         print('\nLobbyist successfully registered.')
     else:
         print('\nNo lobbyist with that ID was found.')
@@ -135,7 +135,7 @@ def command_5(db: sqlite3.Connection):
     salutation = input('Enter the salutation: ')
 
     # 1 for success, 0 for failure
-    if objecttier.set_salutation(db, search, salutation):
+    if objecttier.set_salutation(db, search, salutation) > 0:
         print('\nSalutation successfully set.')
     else:
         print('\nNo lobbyist with that ID was found.')
