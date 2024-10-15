@@ -93,7 +93,7 @@ def command_3(db: sqlite3.Connection):
 
     # enumerate for index
     for i, l in enumerate(top_n_lobbyists):
-        print(f'{i} . {l.First_Name} {l.Last_Name}')
+        print(f'\n{i + 1} . {l.First_Name} {l.Last_Name}')
         print(f'  Phone: {l.Phone}')
         print(f'  Total Compensation: ${l.Total_Compensation:,.02f}')
         print('  Clients: ', end='')
